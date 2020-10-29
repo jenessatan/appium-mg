@@ -36,14 +36,36 @@ public class TestPlan {
     public void clickFirstMovie() {
         MovieListing listing = new MovieListing(driver);
         Assert.assertTrue(listing.headerDisplayed());
-        listing.clickMoviePoster();
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        listing.clickMoviePoster(0);
     }
 
-//    @AfterMethod
-//    public void resetAfterEach() {
-//        driver.resetApp();
-//    }
+    @Test
+    public void testOpenCloseSearchBar() {
+        MovieListing listing = new MovieListing(driver);
+        Assert.assertTrue(listing.headerDisplayed());
+
+        listing.openSearchField();
+        Assert.assertFalse(listing.headerDisplayed());
+
+        listing.closeSearchField();
+        Assert.assertTrue(listing.headerDisplayed());
+        Assert.assertFalse(listing.searchFieldDisplayed());
+    }
+
+    @Test
+    public void testMovieSearch() {
+        MovieListing listing = new MovieListing(driver);
+        Assert.assertTrue(listing.headerDisplayed());
+
+        listing.openSearchField();
+        Assert.assertFalse(listing.headerDisplayed());
+
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        Assert.assertTrue(listing.searchFieldDisplayed());
+        listing.enterSearchTerms("Hot Fuzz");
+
+
+    }
 
     @AfterSuite
     public void tearDown() {
