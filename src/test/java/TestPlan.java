@@ -33,7 +33,7 @@ public class TestPlan {
     }
 
     @Test
-    public void clickFirstMovie() {
+    public void testClickFirstMovie() {
         MovieListing listing = new MovieListing(driver);
         Assert.assertTrue(listing.headerDisplayed());
         listing.clickMoviePoster(0);
@@ -54,6 +54,8 @@ public class TestPlan {
 
     @Test
     public void testMovieSearch() {
+        String movieTitleToSearch = "Hot Fuzz";
+
         MovieListing listing = new MovieListing(driver);
         Assert.assertTrue(listing.headerDisplayed());
 
@@ -62,9 +64,10 @@ public class TestPlan {
 
         driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
         Assert.assertTrue(listing.searchFieldDisplayed());
-        listing.enterSearchTerms("Hot Fuzz");
+        listing.enterSearchTerms(movieTitleToSearch);
 
-
+        Assert.assertEquals(1, listing.movieTitleCount());
+        Assert.assertEquals(movieTitleToSearch, listing.getMovieTitle(0));
     }
 
     @AfterSuite
