@@ -1,30 +1,30 @@
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Test;
+import org.testng.Assert;
+import org.testng.annotations.*;
 
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 public class TestPlan {
-    private static AndroidDriver driver;
+    private static AndroidDriver<AndroidElement> driver;
 
     @BeforeSuite
     public static void setUp() throws MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability(MobileCapabilityType.UDID, "LGD8524f24eecd");
+        capabilities.setCapability(MobileCapabilityType.UDID, Utils.DEVICE_ID);
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "ANDROID");
-        capabilities.setCapability("appPackage", "com.esoxjem.movieguide");
-        capabilities.setCapability("appActivity", ".listing.MoviesListingActivity");
+        capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, "com.esoxjem.movieguide");
+        capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, ".listing.MoviesListingActivity");
         capabilities.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true);
 
-        driver = new AndroidDriver(new URL("http://0.0.0.0:4723/wd/hub"), capabilities);
+        driver = new AndroidDriver<>(new URL(Utils.APPIUM_SERVER_URL), capabilities);
     }
 
     @BeforeMethod
@@ -34,11 +34,20 @@ public class TestPlan {
 
     @Test
     public void clickFirstMovie() {
-        driver.findElement(By.id("com.esoxjem.movieguide:id/movie_poster")).click();
+        MovieListing listing = new MovieListing(driver);
+        Assert.assertTrue(listing.headerDisplayed());
+        listing.clickMoviePoster();
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
-    @AfterMethod
+//    @AfterMethod
+//    public void resetAfterEach() {
+//        driver.resetApp();
+//    }
+
+    @AfterSuite
     public void tearDown() {
         driver.closeApp();
+        driver.quit();
     }
 }
