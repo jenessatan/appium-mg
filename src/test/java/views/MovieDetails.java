@@ -36,6 +36,13 @@ public class MovieDetails extends PageObject{
     @AndroidFindBy(xpath="//android.widget.TextView[@resource-id='com.esoxjem.movieguide:id/trailers_label']")
     private AndroidElement trailerLabel;
 
-
+    public Date getDate() {
+        String releaseDateString = releaseDate.getText().split(":")[1];
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd").parse(releaseDateString);
+        }catch(ParseException e) {
+            return null;
+        }
+    }
 
 }

@@ -127,4 +127,66 @@ public class MovieListingTest {
         driver.navigate().back();
         Assert.assertFalse(listing.isSortMenuOpen());
     }
+
+    @Test
+    public void testNewestFilter() {
+        MovieListing listing = new MovieListing(driver);
+        MovieDetails details = new MovieDetails(driver);
+
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isSortMenuOpen());
+        listing.selectFilter("newest");
+
+        // get release date of first movie in list
+        listing.clickMovie(0);
+        Date firstMovieReleaseDate = details.getDate();
+        driver.navigate().back();
+
+        scrollDown();
+        
+        // get next random movie from list
+        listing.clickMovie(2);
+        Date randomMovieReleaseDate = details.getDate();
+        driver.navigate().back();
+
+        scrollDown();
+
+        // get last random movie from list
+        listing.clickMovie(2);
+        Date lastRandomMovieReleaseDate = details.getDate();
+        driver.navigate().back();
+
+        Assert.assertNotNull(firstMovieReleaseDate);
+        Assert.assertNotNull(randomMovieReleaseDate);
+        Assert.assertNotNull(lastRandomMovieReleaseDate);
+
+        boolean isCorrectlyOrdered = firstMovieReleaseDate.compareTo(randomMovieReleaseDate) < 0
+                && randomMovieReleaseDate.compareTo(lastRandomMovieReleaseDate) < 0;
+
+        Assert.assertTrue(isCorrectlyOrdered);
+    }
+
+    @Test
+    public void testHighestFilter() {
+
+    }
+
+    // Helper function to perform scrolls
+    public void scrollDown(){
+        Dimension dimension = driver.manage().window().getSize();
+        int scrollStart = (int) (dimension.getHeight() * 0.8);
+        int scrollEnd = (int) (dimension.getHeight() * 0.2);
+
+        new TouchAction((PerformsTouchActions) driver)
+                .press(PointOption.point(0, scrollStart))
+                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1)))
+                .moveTo(PointOption.point(0, scrollEnd))
+                .release().perform();
+
+        new TouchAction((PerformsTouchActions) driver)
+                .press(PointOption.point(0, scrollStart))
+                .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1)))
+                .moveTo(PointOption.point(0, scrollEnd))
+                .release().perform();
+    }
 }
