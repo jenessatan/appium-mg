@@ -14,6 +14,9 @@ public class MovieListing extends PageObject {
     @AndroidFindBy(xpath = "//android.widget.ImageView[@resource-id='com.esoxjem.movieguide:id/movie_poster']")
     private List<AndroidElement> moviePosters;
 
+    @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id='com.esoxjem.movieguide:id/movie_name']")
+    private List<AndroidElement> movieTitles;
+
     @AndroidFindBy(xpath = "//android.widget.TextView[@text='MovieGuide']")
     private AndroidElement header;
 
@@ -44,6 +47,14 @@ public class MovieListing extends PageObject {
 
     public void clickMoviePoster(int number) {
         moviePosters.get(number).click();
+    }
+
+    public int movieTitleCount() {
+        return movieTitles.size();
+    }
+
+    public String getMovieTitle(int index) {
+        return movieTitles.get(index).getText();
     }
 
     public boolean headerDisplayed() {
