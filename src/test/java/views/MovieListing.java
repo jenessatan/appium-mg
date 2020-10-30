@@ -12,9 +12,6 @@ public class MovieListing extends PageObject {
         super(driver);
     }
 
-    @AndroidFindBy(xpath = "//android.widget.ImageView[@resource-id='com.esoxjem.movieguide:id/movie_poster']")
-    private List<AndroidElement> moviePosters;
-
     @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id='com.esoxjem.movieguide:id/movie_name']")
     private List<AndroidElement> movieTitles;
 
@@ -29,6 +26,9 @@ public class MovieListing extends PageObject {
 
     @AndroidFindBy(xpath = "//android.widget.ImageButton[@content-desc='Collapse']")
     private AndroidElement closeSearchField;
+
+    @AndroidFindBy(xpath="//android.widget.ImageView[@resource-id='com.esoxjem.movieguide:id/search_close_btn']")
+    private AndroidElement clearSearchField;
 
     @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id='android:id/title']")
     private AndroidElement sortTitle;
@@ -46,11 +46,11 @@ public class MovieListing extends PageObject {
     private AndroidElement newestRadioButton;
 
 
-    public void clickMoviePoster(int number) {
-        moviePosters.get(number).click();
+    public void clickMovie(int number) {
+        movieTitles.get(number).click();
     }
 
-    public int movieTitleCount() {
+    public int getMovieCount() {
         return movieTitles.size();
     }
 
@@ -58,7 +58,7 @@ public class MovieListing extends PageObject {
         return movieTitles.get(index).getText();
     }
 
-    public boolean headerDisplayed() {
+    public boolean isHeaderDisplayed() {
         try {
             return header.isDisplayed();
         } catch (NoSuchElementException e) {
@@ -70,7 +70,15 @@ public class MovieListing extends PageObject {
         searchButton.click();
     }
 
-    public boolean searchFieldDisplayed() {
+    public void clearSearchField() {
+        clearSearchField.click();
+    }
+
+    public String getSearchFieldContents() {
+        return searchField.getText();
+    }
+
+    public boolean isSearchFieldDisplayed() {
         try {
             return searchField.isDisplayed();
         } catch (NoSuchElementException e) {

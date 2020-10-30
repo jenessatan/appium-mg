@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class TestPlan {
+public class MovieListingTest {
     private static AndroidDriver<AndroidElement> driver;
 
     @BeforeSuite
@@ -35,24 +35,30 @@ public class TestPlan {
         driver.resetApp();
     }
 
+    @AfterSuite
+    public void tearDown() {
+        driver.closeApp();
+        driver.quit();
+    }
+
     @Test
     public void testClickFirstMovie() {
         MovieListing listing = new MovieListing(driver);
-        Assert.assertTrue(listing.headerDisplayed());
-        listing.clickMoviePoster(0);
+        Assert.assertTrue(listing.isHeaderDisplayed());
+        listing.clickMovie(0);
     }
 
     @Test
     public void testOpenCloseSearchBar() {
         MovieListing listing = new MovieListing(driver);
-        Assert.assertTrue(listing.headerDisplayed());
+        Assert.assertTrue(listing.isHeaderDisplayed());
 
         listing.openSearchField();
-        Assert.assertFalse(listing.headerDisplayed());
+        Assert.assertFalse(listing.isHeaderDisplayed());
 
         listing.closeSearchField();
-        Assert.assertTrue(listing.headerDisplayed());
-        Assert.assertFalse(listing.searchFieldDisplayed());
+        Assert.assertTrue(listing.isHeaderDisplayed());
+        Assert.assertFalse(listing.isSearchFieldDisplayed());
     }
 
     @Test
@@ -60,22 +66,16 @@ public class TestPlan {
         String movieTitleToSearch = "Hot Fuzz";
 
         MovieListing listing = new MovieListing(driver);
-        Assert.assertTrue(listing.headerDisplayed());
+        Assert.assertTrue(listing.isHeaderDisplayed());
 
         listing.openSearchField();
-        Assert.assertFalse(listing.headerDisplayed());
+        Assert.assertFalse(listing.isHeaderDisplayed());
 
         driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-        Assert.assertTrue(listing.searchFieldDisplayed());
+        Assert.assertTrue(listing.isSearchFieldDisplayed());
         listing.enterSearchTerms(movieTitleToSearch);
 
-        Assert.assertEquals(1, listing.movieTitleCount());
+        Assert.assertEquals(1, listing.getMovieCount());
         Assert.assertEquals(movieTitleToSearch, listing.getMovieTitle(0));
-    }
-
-    @AfterSuite
-    public void tearDown() {
-        driver.closeApp();
-        driver.quit();
     }
 }
