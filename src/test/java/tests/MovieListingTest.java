@@ -97,4 +97,34 @@ public class MovieListingTest {
         Assert.assertEquals(1, listing.getMovieCount());
         Assert.assertEquals(movieTitleToSearch, listing.getMovieTitle(0));
     }
+
+    @Test
+    public void testFilterSelection() {
+        MovieListing listing = new MovieListing(driver);
+        Assert.assertTrue(listing.getMovieCount()>0);
+
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isSortMenuOpen());
+        Assert.assertTrue(listing.isGivenFilterSelected("popular"));
+
+        listing.selectFilter("favourite");
+        Assert.assertFalse(listing.isSortMenuOpen());
+
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isGivenFilterSelected("favourite"));
+        listing.selectFilter("newest");
+
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isGivenFilterSelected("newest"));
+        listing.selectFilter("highest");
+
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isGivenFilterSelected("highest"));
+        listing.selectFilter("popular");
+
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isGivenFilterSelected("popular"));
+        driver.navigate().back();
+        Assert.assertFalse(listing.isSortMenuOpen());
+    }
 }

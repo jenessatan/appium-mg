@@ -139,4 +139,19 @@ public class MovieListing extends PageObject {
             newestRadioButton.click();
         }
     }
+
+    
+    public boolean isGivenFilterSelected(String filter) {
+        switch (filter) {
+            case "popular":
+                return mostPopularRadioButton.getAttribute("checked").equalsIgnoreCase("true");
+            case "highest":
+                return highestRatedRadioButton.getAttribute("checked").equalsIgnoreCase("true");
+            case "favourite":
+                return favouritesRadioButton.getAttribute("checked").equalsIgnoreCase("true");
+            case "newest":
+                return newestRadioButton.getAttribute("checked").equalsIgnoreCase("true");
+        }
+        return false;
+    }
 }
