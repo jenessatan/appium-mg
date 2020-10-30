@@ -4,6 +4,11 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.NoSuchElementException;
+
 public class MovieDetails extends PageObject{
     public MovieDetails(AndroidDriver<AndroidElement> driver) {
         super(driver);
@@ -54,4 +59,32 @@ public class MovieDetails extends PageObject{
         }
     }
 
+    public void clickBackButton() {
+        backButton.click();
+    }
+
+    public boolean isFavouriteButtonDisplayed() {
+        try {
+            return favouriteButton.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    public void clickFavouriteButton() {
+        favouriteButton.click();
+    }
+
+    public String getMovieTitle() {
+        return movieTitle.getText().trim();
+    }
+
+    public boolean areDetailsDisplayed() {
+        try {
+            return summaryLabel.isDisplayed() && movieDescription.isDisplayed()
+                    && releaseDate.isDisplayed() && rating.isDisplayed();
+        } catch(NoSuchElementException e) {
+            return false;
+        }
+    }
 }
