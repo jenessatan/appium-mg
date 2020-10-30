@@ -44,8 +44,10 @@ public class MovieListingTest {
     @Test
     public void testClickFirstMovie() {
         MovieListing listing = new MovieListing(driver);
+        MovieDetails details = new MovieDetails(driver);
         Assert.assertTrue(listing.isHeaderDisplayed());
         listing.clickMovie(0);
+        details.areDetailsDisplayed();
     }
 
     @Test
