@@ -168,7 +168,7 @@ public class MovieListingTest {
         Assert.assertTrue(isCorrectlyOrdered);
     }
 
-@Test
+    @Test
     public void testHighestSort() {
         MovieListing listing = new MovieListing(driver);
         MovieDetails details = new MovieDetails(driver);
@@ -202,6 +202,48 @@ public class MovieListingTest {
         boolean isCorrectlyOrdered = firstRating >= secondRating && secondRating >= thirdRating;
 
         Assert.assertTrue(isCorrectlyOrdered);
+    }
+
+    @Test
+    public void testFavourites() {
+        MovieListing listing = new MovieListing(driver);
+        MovieDetails details = new MovieDetails(driver);
+
+        // add favourite
+        String favouriteTitle = listing.getMovieTitle(0);
+        listing.clickMovie(0);
+        Assert.assertTrue(details.isFavouriteButtonDisplayed());
+        details.clickFavouriteButton();
+
+        details.clickBackButton();
+
+        // check that favourite now appears in favourites list
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isSortMenuOpen());
+        listing.selectFilter("favourite");
+
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        Assert.assertEquals(1, listing.getMovieCount());
+       Assert.assertEquals(favouriteTitle, listing.getMovieTitle(0));
+
+       // deselect favourite
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        listing.clickMovie(0);
+        Assert.assertTrue(details.isFavouriteButtonDisplayed());
+        details.clickFavouriteButton();
+
+        details.clickBackButton();
+
+        // check that unfavourited is removed from list
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isSortMenuOpen());
+        listing.selectFilter("popular");
+
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isSortMenuOpen());
+        listing.selectFilter("favourite");
+
+        Assert.assertEquals(0, listing.getMovieCount());
     }
 
     // Helper function to perform scrolls
