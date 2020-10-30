@@ -129,7 +129,7 @@ public class MovieListingTest {
     }
 
     @Test
-    public void testNewestFilter() {
+    public void testNewestSort() {
         MovieListing listing = new MovieListing(driver);
         MovieDetails details = new MovieDetails(driver);
 
@@ -145,14 +145,14 @@ public class MovieListingTest {
         scrollDown();
         
         // get next random movie from list
-        listing.clickMovie(2);
+        listing.clickMovie(0);
         Date randomMovieReleaseDate = details.getDate();
         driver.navigate().back();
 
         scrollDown();
 
         // get last random movie from list
-        listing.clickMovie(2);
+        listing.clickMovie(0);
         Date lastRandomMovieReleaseDate = details.getDate();
         driver.navigate().back();
 
@@ -166,9 +166,40 @@ public class MovieListingTest {
         Assert.assertTrue(isCorrectlyOrdered);
     }
 
-    @Test
-    public void testHighestFilter() {
+@Test
+    public void testHighestSort() {
+        MovieListing listing = new MovieListing(driver);
+        MovieDetails details = new MovieDetails(driver);
 
+        listing.clickFilterButton();
+        Assert.assertTrue(listing.isSortMenuOpen());
+        listing.selectFilter("highest");
+
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+        listing.clickMovie(0);
+        float firstRating = details.getRating();
+        driver.navigate().back();
+
+        scrollDown();
+
+        listing.clickMovie(0);
+        float secondRating = details.getRating();
+        driver.navigate().back();
+
+        scrollDown();
+
+        listing.clickMovie(0);
+        float thirdRating = details.getRating();
+        driver.navigate().back();
+
+        Assert.assertNotEquals(-1, firstRating);
+        Assert.assertNotEquals(-1, secondRating);
+        Assert.assertNotEquals(-1, thirdRating);
+
+        boolean isCorrectlyOrdered = firstRating >= secondRating && secondRating >= thirdRating;
+
+        Assert.assertTrue(isCorrectlyOrdered);
     }
 
     // Helper function to perform scrolls

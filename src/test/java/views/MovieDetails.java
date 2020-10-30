@@ -44,5 +44,14 @@ public class MovieDetails extends PageObject{
             return null;
         }
     }
+    
+    public float getRating() {
+        String ratingString = rating.getText().split("/")[0];
+        try {
+            return Float.parseFloat(ratingString);
+        } catch(NumberFormatException e) {
+            return -1;
+        }
+    }
 
 }
