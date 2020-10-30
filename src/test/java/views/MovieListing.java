@@ -30,6 +30,9 @@ public class MovieListing extends PageObject {
     @AndroidFindBy(xpath="//android.widget.ImageView[@resource-id='com.esoxjem.movieguide:id/search_close_btn']")
     private AndroidElement clearSearchField;
 
+    @AndroidFindBy(xpath="//android.widget.TextView[@resource-id='com.esoxjem.movieguide:id/action_sort']")
+    private AndroidElement filterButton;
+
     @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id='android:id/title']")
     private AndroidElement sortTitle;
 
@@ -45,6 +48,8 @@ public class MovieListing extends PageObject {
     @AndroidFindBy(xpath = "//android.widget.RadioButton[@resource-id='com.esoxjem.movieguide:id/newest']")
     private AndroidElement newestRadioButton;
 
+    @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id='com.esoxjem.movieguide:id/snackbar_text']")
+    private AndroidElement snackBar;
 
     public void clickMovie(int number) {
         movieTitles.get(number).click();
@@ -93,6 +98,45 @@ public class MovieListing extends PageObject {
     public void closeSearchField() {
         if (closeSearchField != null && searchField.isEnabled()) {
             closeSearchField.click();
+        }
+    }
+
+    public boolean isSnackBarDisplayed() {
+        try {
+            return snackBar.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    public boolean isSnackBarForEmptyList() {
+        String emptyListMessage = "Invalid index 0, size is 0";
+        return snackBar.getText().equals(emptyListMessage);
+    }
+   
+    public void clickFilterButton() {
+        filterButton.click();
+    }
+
+    public boolean isSortMenuOpen() {
+        try {
+            return sortTitle.isDisplayed() && mostPopularRadioButton.isDisplayed() 
+                    && highestRatedRadioButton.isDisplayed() && favouritesRadioButton.isDisplayed() 
+                    && newestRadioButton.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+        
+    public void selectFilter(String filter) {
+        if(filter.equals("popular")) {
+            mostPopularRadioButton.click();
+        } else if (filter.equals("highest")) {
+            highestRatedRadioButton.click();
+        } else if(filter.equals("favourite")) {
+            favouritesRadioButton.click();
+        } else if(filter.equals("newest")) {
+            newestRadioButton.click();
         }
     }
 }
