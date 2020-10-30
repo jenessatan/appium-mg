@@ -75,7 +75,7 @@ public class MovieListing extends PageObject {
     }
 
     public String getSearchFieldContents() {
-        return searchField.getText();
+        return searchField.getText().trim();
     }
 
     public boolean isSearchFieldDisplayed() {

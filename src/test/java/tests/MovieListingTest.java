@@ -60,6 +60,25 @@ public class MovieListingTest {
         Assert.assertTrue(listing.isHeaderDisplayed());
         Assert.assertFalse(listing.isSearchFieldDisplayed());
     }
+    
+    @Test
+    public void testClearSearchBar() {
+        String searchTerm = "Deadpool";
+        MovieListing listing = new MovieListing(driver);
+        Assert.assertTrue(listing.isHeaderDisplayed());
+
+        listing.openSearchField();
+        Assert.assertFalse(listing.isHeaderDisplayed());
+
+        Assert.assertTrue(listing.isSearchFieldDisplayed());
+        listing.enterSearchTerms(searchTerm);
+        Assert.assertEquals(searchTerm, listing.getSearchFieldContents());
+
+        listing.clearSearchField();
+        Assert.assertEquals("", listing.getSearchFieldContents());
+
+        Assert.assertTrue(listing.isSearchFieldDisplayed());
+    }
 
     @Test
     public void testMovieSearch() {
